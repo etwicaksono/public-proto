@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sales;
+option go_package = "./gen/example";
+
+service ExampleService {
+  rpc GetExample (ExampleRequest) returns (ExampleResponse);
+}
+
+message ExampleRequest {
+  int64 id = 1;
+}
+
+message  ExampleResponse {
+  string message = 1;
+}
+
