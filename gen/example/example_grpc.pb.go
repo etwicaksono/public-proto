@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -22,7 +23,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ExampleServiceClient interface {
-	GetExampleMessage(ctx context.Context, in *ExampleRequest, opts ...grpc.CallOption) (*ExampleResponse, error)
+	SendTextMessage(ctx context.Context, in *SendTextMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetTextMessage(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetTextMessageResponse, error)
+	SendMultimediaMessage(ctx context.Context, in *SendMultimediaMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetMultimediaMessage(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetMultimediaMessageResponse, error)
 }
 
 type exampleServiceClient struct {
@@ -33,9 +37,36 @@ func NewExampleServiceClient(cc grpc.ClientConnInterface) ExampleServiceClient {
 	return &exampleServiceClient{cc}
 }
 
-func (c *exampleServiceClient) GetExampleMessage(ctx context.Context, in *ExampleRequest, opts ...grpc.CallOption) (*ExampleResponse, error) {
-	out := new(ExampleResponse)
-	err := c.cc.Invoke(ctx, "/sales.ExampleService/GetExampleMessage", in, out, opts...)
+func (c *exampleServiceClient) SendTextMessage(ctx context.Context, in *SendTextMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/example.ExampleService/SendTextMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) GetTextMessage(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetTextMessageResponse, error) {
+	out := new(GetTextMessageResponse)
+	err := c.cc.Invoke(ctx, "/example.ExampleService/GetTextMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) SendMultimediaMessage(ctx context.Context, in *SendMultimediaMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/example.ExampleService/SendMultimediaMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) GetMultimediaMessage(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetMultimediaMessageResponse, error) {
+	out := new(GetMultimediaMessageResponse)
+	err := c.cc.Invoke(ctx, "/example.ExampleService/GetMultimediaMessage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,15 +77,27 @@ func (c *exampleServiceClient) GetExampleMessage(ctx context.Context, in *Exampl
 // All implementations should embed UnimplementedExampleServiceServer
 // for forward compatibility
 type ExampleServiceServer interface {
-	GetExampleMessage(context.Context, *ExampleRequest) (*ExampleResponse, error)
+	SendTextMessage(context.Context, *SendTextMessageRequest) (*emptypb.Empty, error)
+	GetTextMessage(context.Context, *emptypb.Empty) (*GetTextMessageResponse, error)
+	SendMultimediaMessage(context.Context, *SendMultimediaMessageRequest) (*emptypb.Empty, error)
+	GetMultimediaMessage(context.Context, *emptypb.Empty) (*GetMultimediaMessageResponse, error)
 }
 
 // UnimplementedExampleServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedExampleServiceServer struct {
 }
 
-func (UnimplementedExampleServiceServer) GetExampleMessage(context.Context, *ExampleRequest) (*ExampleResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetExampleMessage not implemented")
+func (UnimplementedExampleServiceServer) SendTextMessage(context.Context, *SendTextMessageRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendTextMessage not implemented")
+}
+func (UnimplementedExampleServiceServer) GetTextMessage(context.Context, *emptypb.Empty) (*GetTextMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTextMessage not implemented")
+}
+func (UnimplementedExampleServiceServer) SendMultimediaMessage(context.Context, *SendMultimediaMessageRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendMultimediaMessage not implemented")
+}
+func (UnimplementedExampleServiceServer) GetMultimediaMessage(context.Context, *emptypb.Empty) (*GetMultimediaMessageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMultimediaMessage not implemented")
 }
 
 // UnsafeExampleServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -68,20 +111,74 @@ func RegisterExampleServiceServer(s grpc.ServiceRegistrar, srv ExampleServiceSer
 	s.RegisterService(&ExampleService_ServiceDesc, srv)
 }
 
-func _ExampleService_GetExampleMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ExampleRequest)
+func _ExampleService_SendTextMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendTextMessageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ExampleServiceServer).GetExampleMessage(ctx, in)
+		return srv.(ExampleServiceServer).SendTextMessage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sales.ExampleService/GetExampleMessage",
+		FullMethod: "/example.ExampleService/SendTextMessage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExampleServiceServer).GetExampleMessage(ctx, req.(*ExampleRequest))
+		return srv.(ExampleServiceServer).SendTextMessage(ctx, req.(*SendTextMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_GetTextMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).GetTextMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/example.ExampleService/GetTextMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).GetTextMessage(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_SendMultimediaMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendMultimediaMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).SendMultimediaMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/example.ExampleService/SendMultimediaMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).SendMultimediaMessage(ctx, req.(*SendMultimediaMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_GetMultimediaMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).GetMultimediaMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/example.ExampleService/GetMultimediaMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).GetMultimediaMessage(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -90,12 +187,24 @@ func _ExampleService_GetExampleMessage_Handler(srv interface{}, ctx context.Cont
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ExampleService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "sales.ExampleService",
+	ServiceName: "example.ExampleService",
 	HandlerType: (*ExampleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetExampleMessage",
-			Handler:    _ExampleService_GetExampleMessage_Handler,
+			MethodName: "SendTextMessage",
+			Handler:    _ExampleService_SendTextMessage_Handler,
+		},
+		{
+			MethodName: "GetTextMessage",
+			Handler:    _ExampleService_GetTextMessage_Handler,
+		},
+		{
+			MethodName: "SendMultimediaMessage",
+			Handler:    _ExampleService_SendMultimediaMessage_Handler,
+		},
+		{
+			MethodName: "GetMultimediaMessage",
+			Handler:    _ExampleService_GetMultimediaMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

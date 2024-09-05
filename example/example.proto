@@ -1,17 +1,50 @@
 syntax = "proto3";
 
-package sales;
+package example;
 option go_package = "./gen/example";
+import "google/protobuf/empty.proto";
 
 service ExampleService {
-  rpc GetExampleMessage (ExampleRequest) returns (ExampleResponse);
+  rpc SendTextMessage (SendTextMessageRequest) returns (google.protobuf.Empty);
+  rpc GetTextMessage (google.protobuf.Empty) returns (GetTextMessageResponse);
+  rpc SendMultimediaMessage (SendMultimediaMessageRequest) returns (google.protobuf.Empty);
+  rpc GetMultimediaMessage (google.protobuf.Empty) returns (GetMultimediaMessageResponse);
 }
 
-message ExampleRequest {
-  string message = 1;
+// Text Message
+message SendTextMessageRequest {
+  string sender = 1;
+  string receiver = 2;
+  string message = 3;
 }
 
-message  ExampleResponse {
-  string message = 1;
+message MessageTextItem {
+  string id = 1;
+  string sender = 2;
+  string receiver = 3;
+  string message = 4;
+}
+
+message  GetTextMessageResponse {
+  repeated MessageTextItem data = 1;
+}
+
+// Multimedia Message
+message SendMultimediaMessageRequest {
+  string sender = 1;
+  string receiver = 2;
+  string message = 3;
+}
+
+message MessageMultimediaItem {
+  string id = 1;
+  string sender = 2;
+  string receiver = 3;
+  string message = 4;
+  string fileUrl = 5;
+}
+
+message  GetMultimediaMessageResponse {
+  repeated MessageMultimediaItem data = 1;
 }
 
