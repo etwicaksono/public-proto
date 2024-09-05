@@ -4,11 +4,11 @@ package sales;
 option go_package = "./gen/example";
 
 service ExampleService {
-  rpc GetExample (ExampleRequest) returns (ExampleResponse);
+  rpc GetExampleMessage (ExampleRequest) returns (ExampleResponse);
 }
 
 message ExampleRequest {
-  int64 id = 1;
+  string message = 1;
 }
 
 message  ExampleResponse {

@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ExampleServiceClient interface {
-	GetExample(ctx context.Context, in *ExampleRequest, opts ...grpc.CallOption) (*ExampleResponse, error)
+	GetExampleMessage(ctx context.Context, in *ExampleRequest, opts ...grpc.CallOption) (*ExampleResponse, error)
 }
 
 type exampleServiceClient struct {
@@ -33,9 +33,9 @@ func NewExampleServiceClient(cc grpc.ClientConnInterface) ExampleServiceClient {
 	return &exampleServiceClient{cc}
 }
 
-func (c *exampleServiceClient) GetExample(ctx context.Context, in *ExampleRequest, opts ...grpc.CallOption) (*ExampleResponse, error) {
+func (c *exampleServiceClient) GetExampleMessage(ctx context.Context, in *ExampleRequest, opts ...grpc.CallOption) (*ExampleResponse, error) {
 	out := new(ExampleResponse)
-	err := c.cc.Invoke(ctx, "/sales.ExampleService/GetExample", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/sales.ExampleService/GetExampleMessage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,15 +46,15 @@ func (c *exampleServiceClient) GetExample(ctx context.Context, in *ExampleReques
 // All implementations should embed UnimplementedExampleServiceServer
 // for forward compatibility
 type ExampleServiceServer interface {
-	GetExample(context.Context, *ExampleRequest) (*ExampleResponse, error)
+	GetExampleMessage(context.Context, *ExampleRequest) (*ExampleResponse, error)
 }
 
 // UnimplementedExampleServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedExampleServiceServer struct {
 }
 
-func (UnimplementedExampleServiceServer) GetExample(context.Context, *ExampleRequest) (*ExampleResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetExample not implemented")
+func (UnimplementedExampleServiceServer) GetExampleMessage(context.Context, *ExampleRequest) (*ExampleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetExampleMessage not implemented")
 }
 
 // UnsafeExampleServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -68,20 +68,20 @@ func RegisterExampleServiceServer(s grpc.ServiceRegistrar, srv ExampleServiceSer
 	s.RegisterService(&ExampleService_ServiceDesc, srv)
 }
 
-func _ExampleService_GetExample_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ExampleService_GetExampleMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ExampleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ExampleServiceServer).GetExample(ctx, in)
+		return srv.(ExampleServiceServer).GetExampleMessage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sales.ExampleService/GetExample",
+		FullMethod: "/sales.ExampleService/GetExampleMessage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExampleServiceServer).GetExample(ctx, req.(*ExampleRequest))
+		return srv.(ExampleServiceServer).GetExampleMessage(ctx, req.(*ExampleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -94,8 +94,8 @@ var ExampleService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ExampleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetExample",
-			Handler:    _ExampleService_GetExample_Handler,
+			MethodName: "GetExampleMessage",
+			Handler:    _ExampleService_GetExampleMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
