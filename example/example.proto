@@ -30,10 +30,17 @@ message  GetTextMessageResponse {
 }
 
 // Multimedia Message
+enum MultimediaStorage {
+  LOCAL = 0;
+  MINIO = 1;
+}
+
 message SendMultimediaMessageRequest {
   string sender = 1;
   string receiver = 2;
   string message = 3;
+  MultimediaStorage storage = 4;
+  repeated bytes files = 5;
 }
 
 message MessageMultimediaItem {
