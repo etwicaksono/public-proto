@@ -35,12 +35,17 @@ enum MultimediaStorage {
   MINIO = 1;
 }
 
+message MultimediaFile {
+  string filename = 1;
+  bytes data = 2;
+}
+
 message SendMultimediaMessageRequest {
   string sender = 1;
   string receiver = 2;
   string message = 3;
   MultimediaStorage storage = 4;
-  repeated bytes files = 5;
+  repeated MultimediaFile files = 5;
 }
 
 message MessageMultimediaItem {
