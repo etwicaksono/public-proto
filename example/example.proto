@@ -37,7 +37,8 @@ enum MultimediaStorage {
 
 message MultimediaFile {
   string filename = 1;
-  bytes data = 2;
+  string content_type = 2;
+  bytes data = 3;
 }
 
 message SendMultimediaMessageRequest {
