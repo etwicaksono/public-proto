@@ -54,7 +54,7 @@ message MessageMultimediaItem {
   string sender = 2;
   string receiver = 3;
   string message = 4;
-  string fileUrl = 5;
+  repeated string fileUrls = 5;
 }
 
 message  GetMultimediaMessageResponse {
